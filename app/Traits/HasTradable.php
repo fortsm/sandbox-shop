@@ -7,11 +7,12 @@ use Exception;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 trait HasTradable
 {
     /**
-     * sell the product from one user to another
+     * Sell the product from one user to another
      *
      * @param  int $fromUser
      * @param  int $toUser
@@ -31,7 +32,16 @@ trait HasTradable
             $buyer->wallet->reduceBalance($price * $quantity);
             $this->buyerProductExpand($buyer, $quantity, $price);
             $seller->wallet->expandBalance($price * $quantity);
-            // log
+            Log::info(
+                "The product '{product}' was successfully sold from user {fromUser} to user {toUser} in quantity of {quantity} at a price of {price}",
+                [
+                    'product' => $this->name,
+                    'fromUser' => $fromUser,
+                    'toUser' => $toUser,
+                    'quantity' => $quantity,
+                    'price' => $price,
+                ]
+            );
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();

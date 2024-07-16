@@ -43,6 +43,19 @@ composer install
 
 ## Запросы к API
 
+Продать товар id=7 пользователя id=2 пользователю id=1 по цене 11.47 (количество 10)
+В связи с тем, что БД наполняется случайным образом, может потребоваться поменять
+некоторые id
+
+```sh
+curl --location 'http://localhost/api/products/7/sell' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'from_user=2' \
+--data-urlencode 'to_user=1' \
+--data-urlencode 'price=11.47' \
+--data-urlencode 'quantity=10'
+```
+
 ### остановка контейнеров
 
 ```sh
