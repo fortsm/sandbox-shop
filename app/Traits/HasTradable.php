@@ -9,17 +9,16 @@ use Exception;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 trait HasTradable
 {
     /**
      * Sell the product from one user to another
      *
-     * @param  int $fromUser
-     * @param  int $toUser
-     * @param  float $price
-     * @param  int $quantity
+     * @param int $fromUser
+     * @param int $toUser
+     * @param float $price
+     * @param int $quantity
      * @return JsonResponse
      */
     public function sell(int $fromUser, int $toUser, float $price, int $quantity): JsonResponse
