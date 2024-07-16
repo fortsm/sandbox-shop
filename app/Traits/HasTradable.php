@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use App\Events\ProductSold;
+use App\Models\Product;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -32,16 +34,7 @@ trait HasTradable
             $buyer->wallet->reduceBalance($price * $quantity);
             $this->buyerProductExpand($buyer, $quantity, $price);
             $seller->wallet->expandBalance($price * $quantity);
-            Log::info(
-                "The product '{product}' was successfully sold from user {fromUser} to user {toUser} in quantity of {quantity} at a price of {price}",
-                [
-                    'product' => $this->name,
-                    'fromUser' => $fromUser,
-                    'toUser' => $toUser,
-                    'quantity' => $quantity,
-                    'price' => $price,
-                ]
-            );
+            ProductSold::dispatch($this->id, $seller, $buyer, $price, $quantity);
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
